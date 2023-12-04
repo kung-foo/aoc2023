@@ -48,4 +48,4 @@ for row in src:
                 instances[v] += instances[cid]
 
 print("part1", part1)
-print("part1", sum(instances.values()))
+print("part2", sum(instances.values()))

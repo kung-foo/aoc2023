@@ -42,11 +42,10 @@ for row in src:
     if wins:
         part1 += 2 ** (len(wins) - 1)
 
-        for t in range(instances[cid]):
-            for x in range(len(wins)):
-                v = cid + 1 + x
-                if v <= max_cid:
-                    instances[v] += 1
+        for x in range(len(wins)):
+            v = cid + 1 + x
+            if v <= max_cid:
+                instances[v] += instances[cid]
 
 print("part1", part1)
 print("part1", sum(instances.values()))

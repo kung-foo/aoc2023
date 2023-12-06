@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import random
 from collections import defaultdict
-
-import numpy as np
 import re
 
 src = open("input.txt", "r").readlines()
@@ -29,11 +24,10 @@ part1 = 0
 instances: dict[int, int] = defaultdict(int)
 
 for row in src:
-    row = row.replace("  ", " ")
     m = re.match(r"Card\s+(\d+):([\d\s]+)\|([\d\s]+)", row)
     cid = int(m.group(1))
-    winning = set([int(n) for n in m.group(2).strip().split(" ")])
-    mine = set([int(n) for n in m.group(3).strip().split(" ")])
+    winning = set([int(n) for n in m.group(2).split()])
+    mine = set([int(n) for n in m.group(3).split()])
 
     wins = winning.intersection(mine)
 
@@ -43,8 +37,7 @@ for row in src:
         part1 += 2 ** (len(wins) - 1)
 
         for x in range(len(wins)):
-            v = cid + 1 + x
-            if v <= max_cid:
+            if (v := cid + 1 + x) <= max_cid:
                 instances[v] += instances[cid]
 
 print("part1", part1)

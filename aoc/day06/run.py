@@ -11,12 +11,7 @@ Distance:  9  40  200
 
 src = [r.strip() for r in src if r.strip()]
 
-races = list(
-    zip(
-        [int(x) for x in src[0].split()[1:]],
-        [int(x) for x in src[1].split()[1:]],
-    )
-)
+races = list(zip(*[[int(x) for x in l.split()[1:]] for l in src]))
 
 
 def solve(t: int, p: int) -> int:
@@ -34,8 +29,7 @@ for race in races:
 
 print("part1", part1)
 
-tt = int("".join(src[0].split()[1:]))
-td = int("".join(src[1].split()[1:]))
+tt, td = [int("".join(l.split()[1:])) for l in src]
 c = 0
 
 for t in range(tt):

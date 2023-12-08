@@ -40,14 +40,12 @@ for line in src:
 
 def find(f: str, stop_fn: Callable[[str], bool]) -> tuple[str, int]:
     node = nodes[f]
-    c = 0
 
-    for d in itertools.cycle(inst):
+    for c, d in enumerate(itertools.cycle(inst)):
         node = nodes[node.l] if d == "L" else nodes[node.r]
-        c += 1
 
         if stop_fn(node.name):
-            return node.name, c
+            return node.name, c + 1
 
 
 print("part1:", find("AAA", lambda name: name == "ZZZ")[1])

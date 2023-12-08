@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+
+import os
+from typing import Callable
+
+import sys
+import random
+import numpy as np
+import re
+from dataclasses import dataclass
+
+src = open("input.txt", "r").readlines()
+
+example = """
+RL
+
+AAA = (BBB, CCC)
+BBB = (DDD, EEE)
+CCC = (ZZZ, GGG)
+DDD = (DDD, DDD)
+EEE = (EEE, EEE)
+GGG = (GGG, GGG)
+ZZZ = (ZZZ, ZZZ)
+""".splitlines()
+
+example = """
+LR
+
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)
+""".splitlines()
+
+# src = example
+
+src = [r.strip() for r in src if r.strip()]
+
+inst = src.pop(0)
+
+
+@dataclass
+class Node:
+    name: str
+    l: str
+    r: str
+
+
+nodes: dict[str, Node] = {}
+
+for line in src:
+    (nid, l, r) = filter(None, re.split("[=, ()]", line))
+    nodes[nid] = Node(name=nid, l=l, r=r)
+
+
+def find(f: str, fn: Callable[[str], bool]) -> tuple[str, int]:
+    node = nodes[f]
+
+    c = 0
+
+    while True:
+        for d in inst:
+            if d == "L":
+                node = nodes[node.l]
+            else:
+                node = nodes[node.r]
+
+            c += 1
+
+            if fn(node.name):
+                return node.name, c
+
+
+print("part1:", find("AAA", lambda name: name == "ZZZ")[1])
+
+distances = []
+
+for nid, node in nodes.items():
+    if nid.endswith("A"):
+        _, d = find(nid, lambda name: name[2] == "Z")
+        distances.append(d)
+
+print("part2:", np.lcm.reduce(distances))

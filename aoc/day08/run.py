@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
-import os
 from typing import Callable
-
-import sys
-import random
 import numpy as np
 import re
 from dataclasses import dataclass
@@ -23,24 +19,7 @@ GGG = (GGG, GGG)
 ZZZ = (ZZZ, ZZZ)
 """.splitlines()
 
-example = """
-LR
-
-11A = (11B, XXX)
-11B = (XXX, 11Z)
-11Z = (11B, XXX)
-22A = (22B, XXX)
-22B = (22C, 22C)
-22C = (22Z, 22Z)
-22Z = (22B, 22B)
-XXX = (XXX, XXX)
-""".splitlines()
-
 # src = example
-
-src = [r.strip() for r in src if r.strip()]
-
-inst = src.pop(0)
 
 
 @dataclass
@@ -50,6 +29,8 @@ class Node:
     r: str
 
 
+src = [r.strip() for r in src if r.strip()]
+inst = src.pop(0)
 nodes: dict[str, Node] = {}
 
 for line in src:
@@ -59,16 +40,11 @@ for line in src:
 
 def find(f: str, fn: Callable[[str], bool]) -> tuple[str, int]:
     node = nodes[f]
-
     c = 0
 
     while True:
         for d in inst:
-            if d == "L":
-                node = nodes[node.l]
-            else:
-                node = nodes[node.r]
-
+            node = nodes[node.l] if d == "L" else nodes[node.r]
             c += 1
 
             if fn(node.name):
@@ -81,7 +57,6 @@ distances = []
 
 for nid, node in nodes.items():
     if nid.endswith("A"):
-        _, d = find(nid, lambda name: name[2] == "Z")
-        distances.append(d)
+        distances.append(find(nid, lambda name: name[2] == "Z")[1])
 
 print("part2:", np.lcm.reduce(distances))

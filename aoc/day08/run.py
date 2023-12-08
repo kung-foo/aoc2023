@@ -38,7 +38,7 @@ for line in src:
     nodes[nid] = Node(name=nid, l=l, r=r)
 
 
-def find(f: str, fn: Callable[[str], bool]) -> tuple[str, int]:
+def find(f: str, stop_fn: Callable[[str], bool]) -> tuple[str, int]:
     node = nodes[f]
     c = 0
 
@@ -46,7 +46,7 @@ def find(f: str, fn: Callable[[str], bool]) -> tuple[str, int]:
         node = nodes[node.l] if d == "L" else nodes[node.r]
         c += 1
 
-        if fn(node.name):
+        if stop_fn(node.name):
             return node.name, c
 
 

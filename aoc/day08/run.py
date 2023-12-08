@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import itertools
 from typing import Callable
 import numpy as np
 import re
@@ -42,13 +42,12 @@ def find(f: str, fn: Callable[[str], bool]) -> tuple[str, int]:
     node = nodes[f]
     c = 0
 
-    while True:
-        for d in inst:
-            node = nodes[node.l] if d == "L" else nodes[node.r]
-            c += 1
+    for d in itertools.cycle(inst):
+        node = nodes[node.l] if d == "L" else nodes[node.r]
+        c += 1
 
-            if fn(node.name):
-                return node.name, c
+        if fn(node.name):
+            return node.name, c
 
 
 print("part1:", find("AAA", lambda name: name == "ZZZ")[1])

@@ -6,10 +6,10 @@ img = Image.open("turtle_output.png")
 img = img.crop([x + 1 for x in ImageOps.invert(img).getbbox()])  # pad by one pixel
 img.save("cropped.png")
 
-# wipe out all external red dots
+# red all the things!!!
 ImageDraw.floodfill(img, (0, 0), (255, 0, 0))
 
-# fill back in with back
+# AC/DC Back in Black 🤘🤘
 ImageDraw.floodfill(img, (0, 0), (0, 0, 0))
 
 img.save("flooded.png")

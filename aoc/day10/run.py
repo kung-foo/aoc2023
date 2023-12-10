@@ -3,6 +3,8 @@
 from print_color import print
 import numpy as np
 from skimage.morphology import flood_fill
+import turtle
+from PIL import Image
 
 src = open("input.txt", "r").readlines()
 
@@ -87,7 +89,7 @@ y, x = np.where(maze == "S")
 
 s = (x[0], y[0])
 
-maze[s[1]][s[0]] = "F"
+maze[s[1]][s[0]] = "F"  # TODO: be smarter
 # maze[s[1]][s[0]] = "7"
 
 pos = s
@@ -117,39 +119,35 @@ for y in range(maze.shape[0]):
             print(replace_all(maze[y][x]), color=color, end="")
     print()
 
-import turtle
 
-turtle.penup()
-turtle.screensize(4096, 4096)
+# turtle time!!! 🐢 🐢 🐢 🐢 🐀
 
-
+turtle.penup()  # 🐢
+turtle.screensize(4096, 4096)  # 🐢
 scale = 4
-
-x = True
+maybe = True
 
 for p in path:
-    turtle.goto(p[0] * scale, -(p[1] * scale))
-    if x:
-        turtle.pendown()
-        x = False
+    turtle.goto(p[0] * scale + scale / 2, -(p[1] * scale + scale / 2))  # 🐢
+    if maybe:
+        turtle.pendown()  # 🐢
+        maybe = False
 
 for y in range(maze.shape[0]):
     for x in range(maze.shape[1]):
         if (x, y) in path_points:
             continue
-        turtle.penup()
-        turtle.goto(x * scale + scale / 2, -(y * scale + scale / 2))
-        turtle.pendown()
-        turtle.dot(1, "red")
+        turtle.penup()  # 🐢
+        turtle.goto(x * scale + scale / 2, -(y * scale + scale / 2))  # 🐢
+        turtle.pendown()  # 🐢
+        turtle.dot(1, "red")  # 🐢
 
-turtle.hideturtle()
+turtle.hideturtle()  #
 
-# Save turtle screen as png
 cv = turtle.getcanvas()
-cv.postscript(file="turtle_output.eps", colormode="color")
-from PIL import Image
+cv.postscript(file="/tmp/turtle_output.eps", colormode="color")
 
-img = Image.open("turtle_output.eps")
+img = Image.open("/tmp/turtle_output.eps")
 img.save("turtle_output.png", "png")
 
 turtle.exitonclick()

@@ -27,8 +27,8 @@ example = """
 # src = example
 
 
-def load(s) -> np.ndarray:
-    return np.stack([np.array(list(l)) for l in s])
+def load(s: list[str]) -> np.ndarray:
+    return np.stack([np.array(list(ln)) for ln in s])
 
 
 part1 = 0
@@ -44,8 +44,9 @@ for i, v in enumerate(src):
 
             v1 = np.flip(v1, axis=axis)
 
+            # why can't i just np.resize(...)!?
             if axis == 0:
-                v1 = v1[0:m, :]  # stupid np.resize not actually resizing...
+                v1 = v1[0:m, :]
                 v2 = v2[0:m, :]
             else:
                 v1 = v1[:, 0:m]
@@ -57,7 +58,7 @@ for i, v in enumerate(src):
                 else:
                     part1 += c
 
-            elif (np.prod(v1.shape) - 1) == np.count_nonzero(v1 == v2):
+            elif np.prod(v1.shape) - np.count_nonzero(v1 == v2) == 1:
                 if axis == 0:
                     part2 += 100 * c
                 else:

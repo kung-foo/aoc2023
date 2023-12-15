@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import random
-from collections import OrderedDict
-
-import numpy as np
-
 src = open("input.txt", "r").read()
 
 example = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"
@@ -27,9 +20,7 @@ def hash(s: str) -> int:
 
 print("part1:", sum(map(hash, src)))
 
-boxes = []
-for _ in range(256):
-    boxes.append({})
+boxes = [{} for _ in range(256)]
 
 for p in src:
     if p[-1] == "-":

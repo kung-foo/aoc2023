@@ -38,6 +38,26 @@ class StepVector:
     d: str
 
 
+def step(pos: StepVector) -> tuple[bool, StepVector]:
+    next_step = copy(pos)
+
+    match pos.d:
+        case "r":
+            next_step.x += 1
+        case "l":
+            next_step.x -= 1
+        case "u":
+            next_step.y -= 1
+        case "d":
+            next_step.y += 1
+
+    is_wall = not (
+        0 <= next_step.x < cave.shape[1] and 0 <= next_step.y < cave.shape[0]
+    )
+
+    return is_wall, next_step
+
+
 class StandbyIonControl:
     energized: np.ndarray
     visited: set[StepVector]
@@ -47,26 +67,6 @@ class StandbyIonControl:
         self.energized = np.zeros(cave.shape)
         self.visited = set()
         self.beams = []
-
-    # returns
-    def step(self, pos: StepVector) -> tuple[bool, StepVector]:
-        next_step = copy(pos)
-
-        match pos.d:
-            case "r":
-                next_step.x += 1
-            case "l":
-                next_step.x -= 1
-            case "u":
-                next_step.y -= 1
-            case "d":
-                next_step.y += 1
-
-        is_wall = not (
-            0 <= next_step.x < cave.shape[1] and 0 <= next_step.y < cave.shape[0]
-        )
-
-        return is_wall, next_step
 
     def pew_pew(self, start: StepVector):
         pos = start
@@ -106,7 +106,7 @@ class StandbyIonControl:
                 case "l/":
                     pos.d = "d"
 
-            wall, pos = self.step(pos)
+            wall, pos = step(pos)
 
             if wall:
                 break
@@ -131,17 +131,18 @@ assert part1 in (46, 7788)
 part2 = 0
 
 for x in range(cave.shape[1]):
-    part2 = max(part2, StandbyIonControl().fire(StepVector(x=x, y=0, d="d")))
     part2 = max(
         part2,
+        StandbyIonControl().fire(StepVector(x=x, y=0, d="d")),
         StandbyIonControl().fire(StepVector(x=x, y=cave.shape[0] - 1, d="u")),
     )
 
 for y in range(cave.shape[0]):
-    part2 = max(part2, StandbyIonControl().fire(StepVector(x=0, y=y, d="r")))
     part2 = max(
         part2,
+        StandbyIonControl().fire(StepVector(x=0, y=y, d="r")),
         StandbyIonControl().fire(StepVector(x=cave.shape[1] - 1, y=y, d="l")),
     )
+
 
 print("part2:", part2)

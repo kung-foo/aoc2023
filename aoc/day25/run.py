@@ -3,6 +3,7 @@
 import re
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def plot(g: nx.Graph):
@@ -45,11 +46,7 @@ apparatus.remove_edge("xzz", "kgl")
 apparatus.remove_edge("vkd", "qfb")
 apparatus.remove_edge("xxq", "hqq")
 
-part1 = 1
-for cc in nx.connected_components(apparatus):
-    part1 *= len(cc)
-
-print("part1:", part1)
+print("part1:", np.prod([len(cc) for cc in nx.connected_components(apparatus)]))
 
 # full screen, zoom in, find edge, repeat.
 plot(apparatus)
